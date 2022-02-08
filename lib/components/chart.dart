@@ -9,15 +9,12 @@ class ChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: charts.TimeSeriesChart(
-        _createWeightData(weightList),
-      ),
+    return charts.TimeSeriesChart(
+      _createWeightData(),
     );
   }
 
-  List<charts.Series<WeightData, DateTime>> _createWeightData(
-      List<WeightData> weightList) {
+  List<charts.Series<WeightData, DateTime>> _createWeightData() {
     return [
       charts.Series<WeightData, DateTime>(
         id: 'Muscles',

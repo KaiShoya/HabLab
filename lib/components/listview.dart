@@ -7,14 +7,12 @@ class ListViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: ListView.builder(
-          // padding: const EdgeInsets.all(8.0),
-          itemCount: items.length,
-          itemBuilder: (context, i) {
-            return _buildRow(items[i]);
-          }),
-    );
+    return ListView.builder(
+        // padding: const EdgeInsets.all(8.0),
+        itemCount: items.length,
+        itemBuilder: (context, i) {
+          return _buildRow(items[i]);
+        });
   }
 
   Widget _buildRow(String text) {
