@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import '../models/weight_data.dart';
+import '../models/amount_data.dart';
 
 class ChartWidget extends StatelessWidget {
-  final List<WeightData> weightList;
+  final List<AmountData> amountList;
 
-  const ChartWidget({Key? key, required this.weightList}) : super(key: key);
+  const ChartWidget({Key? key, required this.amountList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return charts.TimeSeriesChart(
-      _createWeightData(),
+      _createAmountData(),
     );
   }
 
-  List<charts.Series<WeightData, DateTime>> _createWeightData() {
+  List<charts.Series<AmountData, DateTime>> _createAmountData() {
     return [
-      charts.Series<WeightData, DateTime>(
+      charts.Series<AmountData, DateTime>(
         id: 'Muscles',
-        data: weightList,
+        data: amountList,
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (WeightData weightData, _) => weightData.date,
-        measureFn: (WeightData weightData, _) => weightData.weight,
+        domainFn: (AmountData amountData, _) => amountData.date,
+        measureFn: (AmountData amountData, _) => amountData.amount,
       )
     ];
   }

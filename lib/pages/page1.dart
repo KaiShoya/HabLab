@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../components/listview.dart';
 import '../components/chart.dart';
-import '../models/weight_data.dart';
+import '../models/amount_data.dart';
 
 class Page1 extends StatefulWidget {
   const Page1({Key? key}) : super(key: key);
@@ -13,23 +13,23 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
-  final WeightDataList _weightList = WeightDataList();
+  final AmountDataList _amountList = AmountDataList();
   DateTime date = DateTime(2022, 1, 1);
   _Page1State() {
-    _weightList.add(WeightData(null, date, 40));
+    _amountList.add(AmountData(null, date, 40));
     date = date.add(const Duration(days: 1));
-    _weightList.add(WeightData(null, date, 53));
+    _amountList.add(AmountData(null, date, 53));
     date = date.add(const Duration(days: 1));
-    _weightList.add(WeightData(null, date, 50));
+    _amountList.add(AmountData(null, date, 50));
     date = date.add(const Duration(days: 1));
-    _weightList.add(WeightData(null, date, 40));
+    _amountList.add(AmountData(null, date, 40));
   }
 
   void _incrementCounter() {
     setState(() {
       date = date.add(const Duration(days: 1));
-      _weightList
-          .add(WeightData(null, date, Random.secure().nextDouble() * 100));
+      _amountList
+          .add(AmountData(null, date, Random.secure().nextDouble() * 100));
     });
   }
 
@@ -42,10 +42,10 @@ class _Page1State extends State<Page1> {
       body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
               Widget>[
-        SizedBox(height: 300, child: ChartWidget(weightList: _weightList.list)),
+        SizedBox(height: 300, child: ChartWidget(amountList: _amountList.list)),
         Expanded(
             child: ListViewWidget(
-                items: _weightList.list.map((e) => e.formatString()).toList())),
+                items: _amountList.list.map((e) => e.formatString()).toList())),
       ])),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
