@@ -13,16 +13,12 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
-  final AmountDataList _amountList = AmountDataList();
-  DateTime date = DateTime(2022, 1, 1);
+  static final AmountDataList _amountList = AmountDataList();
+  final AmountDataProvider provider = AmountDataProvider();
+  DateTime date = DateTime(2022, 1, 5);
+
   _Page1State() {
-    _amountList.add(AmountData(null, date, 40));
-    date = date.add(const Duration(days: 1));
-    _amountList.add(AmountData(null, date, 53));
-    date = date.add(const Duration(days: 1));
-    _amountList.add(AmountData(null, date, 50));
-    date = date.add(const Duration(days: 1));
-    _amountList.add(AmountData(null, date, 40));
+    provider.get1Month(2022, 1).then((data) => _amountList.update(data));
   }
 
   void _incrementCounter() {
