@@ -24,8 +24,7 @@ class _Page1State extends State<Page1> {
   void _incrementCounter() {
     setState(() {
       date = date.add(const Duration(days: 1));
-      _amountList
-          .add(AmountData(null, date, Random.secure().nextDouble() * 100));
+      _amountList.add(AmountData(date, 1, Random.secure().nextDouble() * 100));
     });
   }
 
