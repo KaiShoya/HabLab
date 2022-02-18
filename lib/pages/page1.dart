@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hablab/components/listview.dart';
 import 'package:hablab/components/chart.dart';
+import 'package:hablab/l10n/l10n.dart';
 import 'package:hablab/models/amount_data.dart';
 
 class Page1 extends StatefulWidget {
@@ -24,6 +25,7 @@ class _Page1State extends State<Page1> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('1'),
@@ -33,7 +35,7 @@ class _Page1State extends State<Page1> {
           future: setEvents(),
           builder: (ctx, dataSnapshot) {
             if (dataSnapshot.error != null) {
-              return const Text('エラーが発生しました');
+              return Text(l10n.error);
             }
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,

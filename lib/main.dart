@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hablab/l10n/l10n.dart';
 import 'package:hablab/pages/page1.dart';
 import 'package:hablab/pages/page2.dart';
 import 'package:hablab/pages/page3.dart';
@@ -11,6 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: L10n.localizationsDelegates,
+      supportedLocales: L10n.supportedLocales,
       title: 'Hablab',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -59,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

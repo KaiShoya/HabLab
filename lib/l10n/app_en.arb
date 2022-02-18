@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "error": "Error!!",
+  "deleteButton": "Delete",
+  "deleteMessage": "Do you want to delete it?",
+  "ok": "OK",
+  "save": "Save",
+  "cancel": "Cancel",
+  "inputAmount": "Enter the amount."
+}

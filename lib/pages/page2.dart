@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hablab/l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:hablab/models/amount_data.dart';
@@ -78,6 +79,7 @@ class _Page2State extends State<Page2> {
     showDialog(
       context: context,
       builder: (context) {
+        final l10n = L10n.of(context)!;
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
@@ -96,7 +98,7 @@ class _Page2State extends State<Page2> {
                     },
                   ),
                   TextField(
-                    decoration: const InputDecoration(hintText: '金額を入力'),
+                    decoration: InputDecoration(hintText: l10n.inputAmount),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
@@ -108,11 +110,11 @@ class _Page2State extends State<Page2> {
               actions: <Widget>[
                 // ボタン領域
                 OutlinedButton(
-                  child: const Text('キャンセル'),
+                  child: Text(l10n.cancel),
                   onPressed: () => Navigator.pop(context),
                 ),
                 ElevatedButton(
-                  child: const Text('保存'),
+                  child: Text(l10n.save),
                   onPressed: () {
                     provider.insert(AmountData(
                         null, _selectedDay, _selectItem, _inputItem));
@@ -132,16 +134,17 @@ class _Page2State extends State<Page2> {
     showDialog(
       context: context,
       builder: (context) {
+        final l10n = L10n.of(context)!;
         return AlertDialog(
-          title: const Text('削除してもよろしいですか？'),
+          title: Text(l10n.deleteMessage),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
               onPressed: () => Navigator.pop(context),
             ),
             ElevatedButton(
-              child: const Text('OK'),
+              child: Text(l10n.ok),
               onPressed: () {
                 if (!data.id!.isNaN) {
                   provider.delete(data.id!);
@@ -163,6 +166,7 @@ class _Page2State extends State<Page2> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('2'),
@@ -172,7 +176,7 @@ class _Page2State extends State<Page2> {
           future: setEvents(),
           builder: (ctx, dataSnapshot) {
             if (dataSnapshot.error != null) {
-              return const Text('エラーが発生しました');
+              return Text(l10n.error);
             }
 
             return Column(
@@ -222,7 +226,7 @@ class _Page2State extends State<Page2> {
                                   ),
                                 ),
                                 TextButton(
-                                  child: const Text('削除する'),
+                                  child: Text(l10n.deleteButton),
                                   onPressed: () => _deleteData(value[index]),
                                 ),
                               ],

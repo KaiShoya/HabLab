@@ -1,0 +1,10 @@
+{
+  "@@locale": "ja",
+  "error": "エラーが発生しました。",
+  "deleteButton": "削除",
+  "deleteMessage": "削除しますか？",
+  "ok": "OK",
+  "save": "保存",
+  "cancel": "キャンセル",
+  "inputAmount": "金額を入力"
+}
