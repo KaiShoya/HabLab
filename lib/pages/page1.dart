@@ -14,10 +14,6 @@ class _Page1State extends State<Page1> {
   static final AmountDataList _amountList = AmountDataList();
   final AmountDataProvider provider = AmountDataProvider();
 
-  _Page1State() {
-    provider.get1Month(2022, 2).then((data) => _amountList.update(data));
-  }
-
   Future<void> setEvents() async {
     // // 2022年のデータを取得する
     // List<AmountData> data = await AmountDataProvider().get1Year(2022);
@@ -40,17 +36,20 @@ class _Page1State extends State<Page1> {
               return const Text('エラーが発生しました');
             }
             return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                      height: 300,
-                      child: ChartWidget(amountList: _amountList.list)),
-                  Expanded(
-                      child: ListViewWidget(
-                          items: _amountList.list
-                              .map((e) => e.formatString())
-                              .toList())),
-                ]);
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 300,
+                  child: ChartWidget(amountList: _amountList.list),
+                ),
+                Expanded(
+                  child: ListViewWidget(
+                    items:
+                        _amountList.list.map((e) => e.formatString()).toList(),
+                  ),
+                ),
+              ],
+            );
           },
         ),
       ),

@@ -57,14 +57,18 @@ class _Page2State extends State<Page2> {
     var groupingData = groupBy(data, (AmountData obj) => obj.date);
 
     // グルーピングしたデータをEvent()に格納
-    groupingData.forEach((key, value) {
-      events.addAll({
-        key: List.generate(
-            value.length,
-            (index) => AmountData(
-                value[index].id, key, value[index].tag, value[index].amount))
-      });
-    });
+    groupingData.forEach(
+      (key, value) {
+        events.addAll(
+          {
+            key: List.generate(
+                value.length,
+                (index) => AmountData(value[index].id, key, value[index].tag,
+                    value[index].amount))
+          },
+        );
+      },
+    );
   }
 
   // カレンダーで選択している日付に新しいデータを追加する
@@ -201,27 +205,29 @@ class _Page2State extends State<Page2> {
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 4.0,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: ListTile(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ListTile(
                                     onTap: () => print('${value[index]}'),
                                     title: Text('${value[index]}'),
-                                  )),
-                                  TextButton(
-                                    child: const Text('削除する'),
-                                    onPressed: () => _deleteData(value[index]),
                                   ),
-                                ],
-                              ));
+                                ),
+                                TextButton(
+                                  child: const Text('削除する'),
+                                  onPressed: () => _deleteData(value[index]),
+                                ),
+                              ],
+                            ),
+                          );
                         },
                       );
                     },

@@ -85,10 +85,12 @@ class AmountDataProvider {
 
   Future<AmountData?> findByDate(DateTime date) async {
     Database db = await MyDatabase.get();
-    List<Map> maps = await db.query(tableAmountData,
-        columns: [columnId, columnDate, columnTag, columnAmount],
-        where: '$columnDate = ?',
-        whereArgs: [date]);
+    List<Map> maps = await db.query(
+      tableAmountData,
+      columns: [columnId, columnDate, columnTag, columnAmount],
+      where: '$columnDate = ?',
+      whereArgs: [date],
+    );
     if (maps.isNotEmpty) {
       Map m = maps.first;
       int id = m[columnId];
@@ -103,13 +105,12 @@ class AmountDataProvider {
     Database db = await MyDatabase.get();
     DateTime startDate = DateTime(year);
     DateTime endDate = DateTime(year + 1);
-    List<Map> maps = await db.query(tableAmountData,
-        columns: [columnId, columnDate, columnTag, columnAmount],
-        where: '? <= $columnDate AND $columnDate < ?',
-        whereArgs: [
-          outputFormat.format(startDate),
-          outputFormat.format(endDate)
-        ]);
+    List<Map> maps = await db.query(
+      tableAmountData,
+      columns: [columnId, columnDate, columnTag, columnAmount],
+      where: '? <= $columnDate AND $columnDate < ?',
+      whereArgs: [outputFormat.format(startDate), outputFormat.format(endDate)],
+    );
     if (maps.isNotEmpty) {
       return maps.map((Map m) {
         int id = m[columnId];
@@ -125,14 +126,13 @@ class AmountDataProvider {
     Database db = await MyDatabase.get();
     DateTime startDate = DateTime(year, month);
     DateTime endDate = DateTime(year, month + 1);
-    List<Map> maps = await db.query(tableAmountData,
-        columns: [columnId, columnDate, columnTag, columnAmount],
-        // TODO: Dummy data. tag = 1
-        where: '$columnTag = 1 AND ? <= $columnDate AND $columnDate < ?',
-        whereArgs: [
-          outputFormat.format(startDate),
-          outputFormat.format(endDate)
-        ]);
+    List<Map> maps = await db.query(
+      tableAmountData,
+      columns: [columnId, columnDate, columnTag, columnAmount],
+      // TODO: Dummy data. tag = 1
+      where: '$columnTag = 1 AND ? <= $columnDate AND $columnDate < ?',
+      whereArgs: [outputFormat.format(startDate), outputFormat.format(endDate)],
+    );
     if (maps.isNotEmpty) {
       return maps.map((Map m) {
         int id = m[columnId];
@@ -162,8 +162,11 @@ class AmountDataProvider {
 
   Future<bool> delete(int id) async {
     Database db = await MyDatabase.get();
-    int count = await db
-        .delete(tableAmountData, where: '$columnId = ?', whereArgs: [id]);
+    int count = await db.delete(
+      tableAmountData,
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
     return count >= 0;
   }
 }
