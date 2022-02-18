@@ -14,6 +14,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
+      localeResolutionCallback: (locale, supportedLocales) {
+        if (locale != null) {
+          final _locale = Locale(locale.languageCode);
+          if (supportedLocales.contains(_locale)) {
+            return _locale;
+          }
+        }
+        return supportedLocales.first;
+      },
       title: 'Hablab',
       theme: ThemeData(
         primarySwatch: Colors.blue,
