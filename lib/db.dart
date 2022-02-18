@@ -9,10 +9,10 @@ class MyDatabase {
         onCreate: (Database db, int version) async {
       await db.execute('''
 CREATE TABLE amount_data (
+  id INTEGER PRIMARY KEY,
   date TEXT,
   tag INTEGER,
-  amount REAL,
-  PRIMARY KEY(date, tag)
+  amount REAL
 )
 ''');
 

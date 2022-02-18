@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import '../components/listview.dart';
 import '../components/chart.dart';
@@ -15,17 +13,17 @@ class Page1 extends StatefulWidget {
 class _Page1State extends State<Page1> {
   static final AmountDataList _amountList = AmountDataList();
   final AmountDataProvider provider = AmountDataProvider();
-  DateTime date = DateTime(2022, 1, 5);
 
   _Page1State() {
-    provider.get1Month(2022, 1).then((data) => _amountList.update(data));
+    provider.get1Month(2022, 2).then((data) => _amountList.update(data));
   }
 
-  void _incrementCounter() {
-    setState(() {
-      date = date.add(const Duration(days: 1));
-      _amountList.add(AmountData(date, 1, Random.secure().nextDouble() * 100));
-    });
+  Future<void> setEvents() async {
+    // // 2022年のデータを取得する
+    // List<AmountData> data = await AmountDataProvider().get1Year(2022);
+    // var groupingData = groupBy(data, (AmountData obj) => obj.date);
+    // TODO: Dummy data.
+    _amountList.update(await provider.get1Month(2022, 2));
   }
 
   @override
@@ -35,17 +33,26 @@ class _Page1State extends State<Page1> {
         title: const Text('1'),
       ),
       body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-              Widget>[
-        SizedBox(height: 300, child: ChartWidget(amountList: _amountList.list)),
-        Expanded(
-            child: ListViewWidget(
-                items: _amountList.list.map((e) => e.formatString()).toList())),
-      ])),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: FutureBuilder(
+          future: setEvents(),
+          builder: (ctx, dataSnapshot) {
+            if (dataSnapshot.error != null) {
+              return const Text('エラーが発生しました');
+            }
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                      height: 300,
+                      child: ChartWidget(amountList: _amountList.list)),
+                  Expanded(
+                      child: ListViewWidget(
+                          items: _amountList.list
+                              .map((e) => e.formatString())
+                              .toList())),
+                ]);
+          },
+        ),
       ),
     );
   }

@@ -1,9 +1,14 @@
 import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../models/amount_data.dart';
+import '../models/tags.dart';
 import '../utils.dart';
+
+final DateFormat outputFormat = DateFormat('yyyy-MM-dd');
 
 class Page2 extends StatefulWidget {
   const Page2({Key? key}) : super(key: key);
@@ -24,6 +29,11 @@ class _Page2State extends State<Page2> {
   static DateTime _selectedDay = _focusedDay;
   final CalendarFormat _calendarFormat = CalendarFormat.month;
 
+  final List<DropdownMenuItem<int>> _items = [
+    for (var tag in Tags())
+      DropdownMenuItem(value: tag.id, child: Text(tag.tag))
+  ];
+
   @override
   void initState() {
     _selectedDay = _focusedDay;
@@ -35,8 +45,12 @@ class _Page2State extends State<Page2> {
   }
 
   Future<void> setEvents() async {
+    // TODO: Dummy data.
     // 2022年のデータを取得する
     List<AmountData> data = await AmountDataProvider().get1Year(2022);
+    // List<AmountData> data = await AmountDataProvider().get1Month(2022, 1);
+    // data.addAll(await AmountDataProvider().get1Month(2022, 2));
+    // data.addAll(await AmountDataProvider().get1Month(2022, 3));
 
     // データを日付毎にグルーピングする
     // List<AmountData> -> Map<AmountData.date, List<AmountData>>
@@ -45,10 +59,96 @@ class _Page2State extends State<Page2> {
     // グルーピングしたデータをEvent()に格納
     groupingData.forEach((key, value) {
       events.addAll({
-        key: List.generate(value.length,
-            (index) => AmountData(key, value[index].tag, value[index].amount))
+        key: List.generate(
+            value.length,
+            (index) => AmountData(
+                value[index].id, key, value[index].tag, value[index].amount))
       });
     });
+  }
+
+  // カレンダーで選択している日付に新しいデータを追加する
+  void _addNewData() {
+    int _selectItem = 0;
+    double _inputItem = 0.0;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(outputFormat.format(_selectedDay)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButton(
+                    items: _items,
+                    value: _selectItem,
+                    onChanged: (value) => {
+                      setState(() {
+                        _selectItem = int.parse(value.toString());
+                      }),
+                    },
+                  ),
+                  TextField(
+                    decoration: const InputDecoration(hintText: '金額を入力'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    onChanged: (value) => _inputItem = double.parse(value),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                // ボタン領域
+                OutlinedButton(
+                  child: const Text('キャンセル'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                ElevatedButton(
+                  child: const Text('保存'),
+                  onPressed: () {
+                    provider.insert(AmountData(
+                        null, _selectedDay, _selectItem, _inputItem));
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // 選択したデータを削除する
+  void _deleteData(AmountData data) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('削除してもよろしいですか？'),
+          actions: <Widget>[
+            // ボタン領域
+            OutlinedButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () {
+                if (!data.id!.isNaN) {
+                  provider.delete(data.id!);
+                }
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -101,19 +201,27 @@ class _Page2State extends State<Page2> {
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: ListTile(
-                              onTap: () => print('${value[index]}'),
-                              title: Text('${value[index]}'),
-                            ),
-                          );
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: ListTile(
+                                    onTap: () => print('${value[index]}'),
+                                    title: Text('${value[index]}'),
+                                  )),
+                                  TextButton(
+                                    child: const Text('削除する'),
+                                    onPressed: () => _deleteData(value[index]),
+                                  ),
+                                ],
+                              ));
                         },
                       );
                     },
@@ -123,6 +231,11 @@ class _Page2State extends State<Page2> {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addNewData,
+        tooltip: 'add',
+        child: const Icon(Icons.add),
       ),
     );
   }

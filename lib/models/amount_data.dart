@@ -3,17 +3,19 @@ import 'package:sqflite/sqflite.dart';
 import '../db.dart';
 
 const String tableAmountData = 'amount_data';
+const String columnId = 'id';
 const String columnDate = 'date';
 const String columnTag = 'tag';
 const String columnAmount = 'amount';
 
 class AmountData {
+  final int? id;
   final DateTime date;
   final int tag;
   final double amount;
   static final DateFormat outputFormat = DateFormat('yyyy-MM-dd');
 
-  AmountData(this.date, this.tag, this.amount);
+  AmountData(this.id, this.date, this.tag, this.amount);
 
   String formatString() {
     return outputFormat.format(date) +
@@ -68,13 +70,14 @@ class AmountDataProvider {
     Database db = await MyDatabase.get();
     List<Map> maps = await db.query(
       tableAmountData,
-      columns: [columnDate, columnTag, columnAmount],
+      columns: [columnId, columnDate, columnTag, columnAmount],
     );
     if (maps.isNotEmpty) {
       return maps.map((Map m) {
+        int id = m[columnId];
         DateTime date = DateTime.parse(m[columnDate]);
         double amount = m[columnAmount];
-        return AmountData(date, m[columnTag], amount);
+        return AmountData(id, date, m[columnTag], amount);
       }).toList();
     }
     return [];
@@ -83,14 +86,15 @@ class AmountDataProvider {
   Future<AmountData?> findByDate(DateTime date) async {
     Database db = await MyDatabase.get();
     List<Map> maps = await db.query(tableAmountData,
-        columns: [columnDate, columnTag, columnAmount],
+        columns: [columnId, columnDate, columnTag, columnAmount],
         where: '$columnDate = ?',
         whereArgs: [date]);
     if (maps.isNotEmpty) {
       Map m = maps.first;
+      int id = m[columnId];
       DateTime date = m[columnDate];
       double amount = m[columnAmount];
-      return AmountData(date, m[columnTag], amount);
+      return AmountData(id, date, m[columnTag], amount);
     }
     return null;
   }
@@ -100,7 +104,7 @@ class AmountDataProvider {
     DateTime startDate = DateTime(year);
     DateTime endDate = DateTime(year + 1);
     List<Map> maps = await db.query(tableAmountData,
-        columns: [columnDate, columnTag, columnAmount],
+        columns: [columnId, columnDate, columnTag, columnAmount],
         where: '? <= $columnDate AND $columnDate < ?',
         whereArgs: [
           outputFormat.format(startDate),
@@ -108,9 +112,10 @@ class AmountDataProvider {
         ]);
     if (maps.isNotEmpty) {
       return maps.map((Map m) {
+        int id = m[columnId];
         DateTime date = DateTime.parse(m[columnDate]);
         double amount = m[columnAmount];
-        return AmountData(date, m[columnTag], amount);
+        return AmountData(id, date, m[columnTag], amount);
       }).toList();
     }
     return [];
@@ -121,17 +126,19 @@ class AmountDataProvider {
     DateTime startDate = DateTime(year, month);
     DateTime endDate = DateTime(year, month + 1);
     List<Map> maps = await db.query(tableAmountData,
-        columns: [columnDate, columnTag, columnAmount],
-        where: '? <= $columnDate AND $columnDate < ?',
+        columns: [columnId, columnDate, columnTag, columnAmount],
+        // TODO: Dummy data. tag = 1
+        where: '$columnTag = 1 AND ? <= $columnDate AND $columnDate < ?',
         whereArgs: [
           outputFormat.format(startDate),
           outputFormat.format(endDate)
         ]);
     if (maps.isNotEmpty) {
       return maps.map((Map m) {
+        int id = m[columnId];
         DateTime date = DateTime.parse(m[columnDate]);
         double amount = m[columnAmount];
-        return AmountData(date, m[columnTag], amount);
+        return AmountData(id, date, m[columnTag], amount);
       }).toList();
     }
     return [];
@@ -152,4 +159,11 @@ class AmountDataProvider {
   //   }
   //   return [];
   // }
+
+  Future<bool> delete(int id) async {
+    Database db = await MyDatabase.get();
+    int count = await db
+        .delete(tableAmountData, where: '$columnId = ?', whereArgs: [id]);
+    return count >= 0;
+  }
 }
