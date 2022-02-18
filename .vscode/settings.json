@@ -1,0 +1,25 @@
+{
+  "html.format.endWithNewline": true,
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.renderWhitespace": "all",
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": false,
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.formatOnPaste": true
+  },
+  "files.associations": {
+    "*.arb": "json",
+  },
+}
