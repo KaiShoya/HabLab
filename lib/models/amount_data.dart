@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
-import '../db.dart';
+import 'package:hablab/db.dart';
 
 const String tableAmountData = 'amount_data';
 const String columnId = 'id';

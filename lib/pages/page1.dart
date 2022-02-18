@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../components/listview.dart';
-import '../components/chart.dart';
-import '../models/amount_data.dart';
+import 'package:hablab/components/listview.dart';
+import 'package:hablab/components/chart.dart';
+import 'package:hablab/models/amount_data.dart';
 
 class Page1 extends StatefulWidget {
   const Page1({Key? key}) : super(key: key);

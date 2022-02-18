@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../models/amount_data.dart';
-import '../models/tags.dart';
-import '../utils.dart';
+import 'package:hablab/models/amount_data.dart';
+import 'package:hablab/models/tags.dart';
+import 'package:hablab/utils.dart';
 
 final DateFormat outputFormat = DateFormat('yyyy-MM-dd');
 

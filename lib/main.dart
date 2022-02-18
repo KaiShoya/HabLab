@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'pages/page1.dart';
-import 'pages/page2.dart';
-import 'pages/page3.dart';
+import 'package:hablab/pages/page1.dart';
+import 'package:hablab/pages/page2.dart';
+import 'package:hablab/pages/page3.dart';
 
 void main() => runApp(const MyApp());
 

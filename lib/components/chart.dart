@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import '../models/amount_data.dart';
+import 'package:hablab/models/amount_data.dart';
 
 class ChartWidget extends StatelessWidget {
   final List<AmountData> amountList;
